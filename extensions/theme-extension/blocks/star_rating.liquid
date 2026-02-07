@@ -1,0 +1,17 @@
+{% assign rules = shop.metafields.volume_discount.rules.value %}
+{% if rules != blank %}
+  {% assign product_ids = rules.products %}
+  {% if product_ids contains product.admin_graphql_api_id %}
+    <div class="volume-discount-widget">
+      Buy {{ rules.minQty | default: 2 }}, get {{ rules.percentOff }}% off
+    </div>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Volume Discount Message",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}

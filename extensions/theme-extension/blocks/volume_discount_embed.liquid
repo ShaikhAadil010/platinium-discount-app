@@ -1,0 +1,26 @@
+{% assign rules = shop.metafields.volume_discount.rules.value %}
+{% if rules != blank %}
+  <style>
+    .volume-discount-widget {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #0f5f3b;
+    }
+  </style>
+  <div
+    id="volume-discount-embed"
+    data-products='{{ rules.products | json }}'
+    data-percent="{{ rules.percentOff }}"
+    data-min-qty="{{ rules.minQty | default: 2 }}"
+  ></div>
+  <script src="{{ 'volume-discount-embed.js' | asset_url }}" defer></script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Volume Discount Embed",
+  "target": "body",
+  "settings": []
+}
+{% endschema %}
