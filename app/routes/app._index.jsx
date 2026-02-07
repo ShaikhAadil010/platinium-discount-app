@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { json } from "@remix-run/node";
 import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 import {
@@ -204,6 +204,17 @@ export default function Index() {
   };
 
   const hasErrors = actionData?.ok === false && actionData?.errors;
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    if (actionData?.ok) {
+      setShowSuccess(true);
+      const timer = setTimeout(() => {
+        setShowSuccess(false);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [actionData?.ok]);
 
   return (
     <Page>
@@ -226,8 +237,11 @@ export default function Index() {
                   {hasErrors?.api && (
                     <Banner tone="critical">{actionData.errors.api}</Banner>
                   )}
-                  {actionData?.ok && (
-                    <Banner tone="success">
+                  {actionData?.ok && showSuccess && (
+                    <Banner
+                      tone="success"
+                      onDismiss={() => setShowSuccess(false)}
+                    >
                       Saved. Discount config updated.
                     </Banner>
                   )}
